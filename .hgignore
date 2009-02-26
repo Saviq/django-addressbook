@@ -1,0 +1,7 @@
+syntax: glob
+
+.eprj
+.svn
+*.pyc
+*.db
+.DS_Store
