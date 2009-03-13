@@ -58,7 +58,8 @@ class ContactAdmin(admin.ModelAdmin):
                     'email_address',
                     'im_account',
                     'phone_number',
-                    'address')
+                    'address',
+                    'admin_thumbnail_view')
     search_fields = ['name',
                      'notes']
     inlines = [

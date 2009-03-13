@@ -3,7 +3,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
-from photologue.models import ImageModel
+from imagekit.models import ImageModel
 
 
 PROPERTY_LABELS = (
@@ -194,8 +194,9 @@ class PostalAddress(PrimaryProperty, LabeledProperty):
         verbose_name_plural = 'postal addresses'
 
 
-class ContactModel(models.Model):
+class Contact(ImageModel):
     name = models.CharField(max_length=200)
+    photo = models.ImageField(upload_to='addressbook/photos', blank=True)
     notes = models.TextField(blank=True)
     date_created = models.DateTimeField(default=datetime.datetime.now,
                                         editable=False)
@@ -204,7 +205,10 @@ class ContactModel(models.Model):
 
     class Meta:
         ordering = ('name',)
-        abstract = True
+        
+    class IKOptions:
+        image_field = 'photo'
+        spec_module = 'addressbook.specs'
 
     def __unicode__(self):
         return self.name
@@ -230,16 +234,7 @@ class ContactModel(models.Model):
 
     def save(self, *args, **kwargs):
         self.date_updated = datetime.datetime.now()
-        super(ContactModel, self).save(*args, **kwargs)
-
-
-class Contact(ContactModel):
-    """ Non-abstract contact implementation. """
-    pass
-
-
-class ContactPhoto(ImageModel):
-    contact = models.OneToOneField(Contact, related_name='photo')
+        super(Contact, self).save(*args, **kwargs)
     
 
 class Group(models.Model):
