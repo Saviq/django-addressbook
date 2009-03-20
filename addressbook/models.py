@@ -34,16 +34,12 @@ class PrimaryPropertyManager(models.Manager):
 # PrimaryPropery 
             
 class ContactProperty(models.Model):
-    content_type = models.ForeignKey(ContentType)
-    object_id = models.PositiveIntegerField()
-    contact_object = generic.GenericForeignKey()
-    
     class Meta:
         abstract = True
 
     def save(self, *args, **kwargs):
-        self.contact_object.date_modified = datetime.datetime.now()
-        self.contact_object.save()
+        self.contact.date_modified = datetime.datetime.now()
+        self.contact.save()
         models.Model.save(self, *args, **kwargs)
 
 
@@ -60,8 +56,7 @@ class PrimaryProperty(ContactProperty):
         if update_primary:
             try:
                 existing = self.__class__.objects.exclude(pk=self.id) \
-                                                 .filter(content_type__pk=self.content_type.id,
-                                                         object_id=self.object_id,
+                                                 .filter(contact=self.contact,
                                                          is_primary=True).get()
             except ObjectDoesNotExist:
                 existing = None
@@ -124,6 +119,7 @@ class PrimaryPropertyDescriptor(object):
             
             
 class CustomField(ContactProperty, NamedProperty):
+    contact = models.ForeignKey('Contact', related_name="custom_fields")
     value = models.TextField()
 
     def __unicode__(self):
@@ -131,10 +127,12 @@ class CustomField(ContactProperty, NamedProperty):
 
 
 class Date(ContactProperty, NamedProperty):
+    contact = models.ForeignKey('Contact', related_name="dates")
     value = models.DateField('date')
 
 
 class EmailAddress(PrimaryProperty, LabeledProperty):
+    contact = models.ForeignKey('Contact', related_name="email_addresses")
     value = models.EmailField('address')
 
     class Meta:
@@ -142,6 +140,7 @@ class EmailAddress(PrimaryProperty, LabeledProperty):
 
 
 class IMAccount(ContactProperty):
+    contact = models.ForeignKey('Contact', related_name="im_accounts")
     service = models.CharField(max_length=30, choices=IM_SERVICES)
     account = models.CharField('user name or email address', max_length=200)
     
@@ -155,6 +154,7 @@ class IMAccount(ContactProperty):
 
 
 class Link(ContactProperty, NamedProperty):
+    contact = models.ForeignKey('Contact', related_name="links")
     value = models.URLField('URL', max_length=200, default='http://')
         
     def save(self, *args, **kwargs):
@@ -164,6 +164,7 @@ class Link(ContactProperty, NamedProperty):
 
 
 class Organization(PrimaryProperty):
+    contact = models.ForeignKey('Contact', related_name="organizations")
     name = models.CharField(max_length=200)
     title = models.CharField(max_length=200, blank=True)
     
@@ -180,6 +181,7 @@ class PhoneNumber(PrimaryProperty):
         ('mobile', 'mobile'),
         ('other', 'other'),
     )
+    contact = models.ForeignKey('Contact', related_name="phone_numbers")
     label = models.CharField(max_length=200, choices=PHONE_NUM_LABELS)
     value = models.CharField('number', max_length=100)
     
@@ -188,6 +190,7 @@ class PhoneNumber(PrimaryProperty):
                                        
 
 class PostalAddress(PrimaryProperty, LabeledProperty):
+    contact = models.ForeignKey('Contact', related_name="postal_addresses")
     value = models.TextField('address')
 
     class Meta:
@@ -195,6 +198,9 @@ class PostalAddress(PrimaryProperty, LabeledProperty):
 
 
 class Contact(ImageModel):
+    """ An person, company, etc.
+    
+    """
     name = models.CharField(max_length=200)
     photo = models.ImageField(upload_to='addressbook/photos', blank=True)
     notes = models.TextField(blank=True)
@@ -209,16 +215,10 @@ class Contact(ImageModel):
     class IKOptions:
         image_field = 'photo'
         spec_module = 'addressbook.specs'
+        cache_dir = 'cache/addressbook'
 
     def __unicode__(self):
         return self.name
-        
-    email_addresses = generic.GenericRelation(EmailAddress)
-    im_accounts = generic.GenericRelation(IMAccount)
-    links = generic.GenericRelation(Link)
-    organizations = generic.GenericRelation(Organization)
-    phone_numbers = generic.GenericRelation(PhoneNumber)
-    postal_addresses = generic.GenericRelation(PostalAddress)
         
     # primary contact properies
     email_address = PrimaryPropertyDescriptor('email_addresses')
@@ -235,7 +235,7 @@ class Contact(ImageModel):
     def save(self, *args, **kwargs):
         self.date_updated = datetime.datetime.now()
         super(Contact, self).save(*args, **kwargs)
-    
+
 
 class Group(models.Model):
     name = models.CharField(max_length=200, unique=True)

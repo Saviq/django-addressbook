@@ -3,53 +3,38 @@ from django.contrib.contenttypes import generic
 
 from models import *
 
-class InlineCustomField(generic.GenericTabularInline):
+
+class InlineCustomField(admin.TabularInline):
     model = CustomField
     extra = 1
-    ct_field_name = 'content_type'
-    id_field_name = 'object_id'
 
-class InlineDate(generic.GenericTabularInline):
+class InlineDate(admin.TabularInline):
     model = Date
     extra = 1
-    ct_field_name = 'content_type'
-    id_field_name = 'object_id'
 
-class InlineEmailAddress(generic.GenericTabularInline):
+class InlineEmailAddress(admin.TabularInline):
     model = EmailAddress
     extra = 2
-    ct_field_name = 'content_type'
-    id_field_name = 'object_id'
 
-class InlineIMAccount(generic.GenericTabularInline):
+class InlineIMAccount(admin.TabularInline):
     model = IMAccount
     extra = 1
-    ct_field_name = 'content_type'
-    id_field_name = 'object_id'
 
-class InlineLink(generic.GenericTabularInline):
+class InlineLink(admin.TabularInline):
     model = Link
     extra = 1
-    ct_field_name = 'content_type'
-    id_field_name = 'object_id'
 
-class InlineOrganization(generic.GenericTabularInline):
+class InlineOrganization(admin.TabularInline):
     model = Organization
     extra = 1
-    ct_field_name = 'content_type'
-    id_field_name = 'object_id'
 
-class InlinePhoneNumber(generic.GenericTabularInline):
+class InlinePhoneNumber(admin.TabularInline):
     model = PhoneNumber
     extra = 2
-    ct_field_name = 'content_type'
-    id_field_name = 'object_id'
 
-class InlinePostalAddress(generic.GenericTabularInline):
+class InlinePostalAddress(admin.TabularInline):
     model = PostalAddress
     extra = 1
-    ct_field_name = 'content_type'
-    id_field_name = 'object_id'
 
 
 class ContactAdmin(admin.ModelAdmin):
