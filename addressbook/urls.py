@@ -5,6 +5,6 @@ from models import *
 # databrowse
 databrowse.site.register(Contact)
 databrowse.site.register(Group)
-urlpatterns += patterns('',
+urlpatterns = patterns('',
     (r'^browse/(.*)', databrowse.site.root),
 )
