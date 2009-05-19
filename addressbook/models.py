@@ -123,7 +123,7 @@ class CustomField(ContactProperty, NamedProperty):
     value = models.TextField()
 
     def __unicode__(self):
-        return u'%s: %s' % (self.label, self.value)
+        return u'%s: %s' % (self.name, self.value)
 
 
 class Date(ContactProperty, NamedProperty):
