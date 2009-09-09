@@ -1,4 +1,3 @@
-import datetime
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
 from django.core.exceptions import ObjectDoesNotExist
@@ -38,7 +37,6 @@ class ContactProperty(models.Model):
         abstract = True
 
     def save(self, *args, **kwargs):
-        self.contact.date_modified = datetime.datetime.now()
         self.contact.save()
         models.Model.save(self, *args, **kwargs)
 
@@ -169,7 +167,7 @@ class Organization(PrimaryProperty):
     title = models.CharField(max_length=200, blank=True)
     
     def __unicode__(self):
-        return ', '.join([s for s in [self.name, self.title] if len(s)])
+        return self.name
 
 
 class PhoneNumber(PrimaryProperty):
@@ -198,16 +196,15 @@ class PostalAddress(PrimaryProperty, LabeledProperty):
 
 
 class Contact(ImageModel):
-    """ An person, company, etc.
+    """ A person or company.
     
     """
     name = models.CharField(max_length=200)
-    photo = models.ImageField(upload_to='addressbook/photos', blank=True)
+    is_company = models.BooleanField(default=False)
+    photo = models.ImageField(upload_to='var/addressbook/photos', blank=True)
     notes = models.TextField(blank=True)
-    date_created = models.DateTimeField(default=datetime.datetime.now,
-                                        editable=False)
-    date_updated = models.DateTimeField(default=datetime.datetime.now,
-                                        editable=False)
+    date_created = models.DateTimeField(auto_now_add=True, editable=False)
+    date_updated = models.DateTimeField(auto_now=True, editable=False)
 
     class Meta:
         ordering = ('name',)
@@ -215,7 +212,7 @@ class Contact(ImageModel):
     class IKOptions:
         image_field = 'photo'
         spec_module = 'addressbook.specs'
-        cache_dir = 'cache/addressbook'
+        cache_dir = 'var/cache/addressbook'
 
     def __unicode__(self):
         return self.name
@@ -231,10 +228,6 @@ class Contact(ImageModel):
     def address(self):
         return ', '.join([s.strip() for s in \
                           str(self.postal_address).split('\n')])
-
-    def save(self, *args, **kwargs):
-        self.date_updated = datetime.datetime.now()
-        super(Contact, self).save(*args, **kwargs)
 
 
 class Group(models.Model):
