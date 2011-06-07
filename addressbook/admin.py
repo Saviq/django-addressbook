@@ -32,7 +32,7 @@ class InlinePhoneNumber(admin.TabularInline):
     model = PhoneNumber
     extra = 2
 
-class InlinePostalAddress(admin.TabularInline):
+class InlinePostalAddress(admin.StackedInline):
     model = PostalAddress
     extra = 1
 

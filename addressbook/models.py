@@ -207,11 +207,22 @@ class PhoneNumber(PrimaryProperty):
 
 class PostalAddress(PrimaryProperty, LabeledProperty):
     contact = models.ForeignKey('Contact', related_name="postal_addresses")
-    value = models.TextField(_('address'))
+    address1 = models.CharField(_("address line 1"), max_length=127, blank=False)
+    address2 = models.CharField(_("address line 2"), max_length=127, blank=True)
+    city = models.CharField(_("city"), max_length=127, blank=True)
+    state = models.CharField(_("state/province/region"), max_length=127, blank=True)
+    country = models.CharField(_("country"), max_length=127)
+    postcode = models.CharField(_("postal code/zip code"), max_length=31, blank=True)
 
     class Meta:
         verbose_name = _("postal address")
         verbose_name_plural = _("postal addresses")
+        
+    @property
+    def value(self):
+        data = [self.address1, self.address2, self.city,
+                self.state, self.country, self.postcode]
+        return ", ".join([i for i in data if i])
 
 
 class Contact(ImageModel):
