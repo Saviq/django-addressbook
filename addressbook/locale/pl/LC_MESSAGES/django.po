@@ -1,0 +1,227 @@
+# Translation for Django Addressbook
+# Copyright (c) 2007-2011, Justin C. Driscoll
+# This file is distributed under the same license as the OpenSAP package.
+# Michał Sawicz <michal@sawicz.net>, 2011.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: 0.1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2011-06-08 02:02+0200\n"
+"PO-Revision-Date: 2011-06-08 01:45+0100\n"
+"Last-Translator: Michał Sawicz <michal@sawicz.net>\n"
+"Language-Team: \n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
+"|| n%100>=20) ? 1 : 2)\n"
+
+#: models.py:11 models.py:189
+msgid "home"
+msgstr "domowy"
+
+#: models.py:12 models.py:190
+msgid "work"
+msgstr "służbowy"
+
+#: models.py:13 models.py:194
+msgid "other"
+msgstr "inny"
+
+#: models.py:17
+msgid "Google Talk"
+msgstr "Google Talk"
+
+#: models.py:18
+msgid "AIM"
+msgstr "AIM"
+
+#: models.py:19
+msgid "Yahoo"
+msgstr "Yahoo"
+
+#: models.py:20
+msgid "MSN"
+msgstr "MSN"
+
+#: models.py:21
+msgid "ICQ"
+msgstr "ICQ"
+
+#: models.py:22
+msgid "Jabber"
+msgstr "Jabber"
+
+#: models.py:47
+msgid "primary"
+msgstr "podstawowy"
+
+#: models.py:77 models.py:197
+msgid "label"
+msgstr "etykieta"
+
+#: models.py:87 models.py:176
+msgid "name"
+msgstr "nazwa"
+
+#: models.py:123
+msgid "value"
+msgstr "wartość"
+
+#: models.py:131 models.py:134
+msgid "date"
+msgstr "data"
+
+#: models.py:135
+msgid "dates"
+msgstr "daty"
+
+#: models.py:139 models.py:210
+msgid "address"
+msgstr "adres"
+
+#: models.py:142
+msgid "email address"
+msgstr "adres e-mail"
+
+#: models.py:143
+msgid "email addresses"
+msgstr "adresy e-mail"
+
+#: models.py:148
+msgid "service"
+msgstr "usługa"
+
+#: models.py:149
+msgid "account"
+msgstr "identyfikator"
+
+#: models.py:149
+msgid "user name or email address"
+msgstr "Nazwa użytkownika lub adres e-mail"
+
+#: models.py:152
+msgid "IM account"
+msgstr "konto komunikatora"
+
+#: models.py:153
+msgid "IM accounts"
+msgstr "konta komunikatora"
+
+#: models.py:162
+msgid "URL"
+msgstr "adres URL"
+
+#: models.py:165
+msgid "link"
+msgstr "odnośnik"
+
+#: models.py:166
+msgid "links"
+msgstr "odnośniki"
+
+#: models.py:177
+msgid "title"
+msgstr "tytuł"
+
+#: models.py:180
+msgid "organization"
+msgstr "organizacja"
+
+#: models.py:181
+msgid "organizations"
+msgstr "organizacje"
+
+#: models.py:191
+msgid "home fax"
+msgstr "faks - domowy"
+
+#: models.py:192
+msgid "work fax"
+msgstr "faks - służbowy"
+
+#: models.py:193
+msgid "mobile"
+msgstr "komórkowy"
+
+#: models.py:198
+msgid "number"
+msgstr "numer"
+
+#: models.py:201
+msgid "phone number"
+msgstr "numer telefonu"
+
+#: models.py:202
+msgid "phone numbers"
+msgstr "numery telefonu"
+
+#: models.py:213
+msgid "postal address"
+msgstr "adres pocztowy"
+
+#: models.py:214
+msgid "postal addresses"
+msgstr "adresy pocztowe"
+
+#: models.py:222
+msgid "company"
+msgstr "firma"
+
+#: models.py:223
+msgid "photo"
+msgstr "zdjęcie"
+
+#: models.py:224
+msgid "notes"
+msgstr "notatki"
+
+#: models.py:229
+msgid "contact"
+msgstr "kontakt"
+
+#: models.py:230
+msgid "contacts"
+msgstr "kontakty"
+
+#: models.py:255
+msgid "description"
+msgstr "opis"
+
+#: models.py:256
+msgid "members"
+msgstr "członkowie"
+
+#: models.py:259
+msgid "group"
+msgstr "grupa"
+
+#: models.py:260
+msgid "groups"
+msgstr "grupy"
+
+#~ msgid "landline"
+#~ msgstr "stacjonarny"
+
+#~ msgid "fax"
+#~ msgstr "faks"
+
+#~ msgid "address line 1"
+#~ msgstr "adres - linia 1"
+
+#~ msgid "address line 2"
+#~ msgstr "adres - linia 2"
+
+#~ msgid "city"
+#~ msgstr "miasto"
+
+#~ msgid "state/province/region"
+#~ msgstr "stan / województwo"
+
+#~ msgid "country"
+#~ msgstr "państwo"
+
+#~ msgid "postal code/zip code"
+#~ msgstr "kod pocztowy"

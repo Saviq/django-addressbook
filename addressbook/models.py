@@ -1,3 +1,5 @@
+from django.utils.translation import ugettext_lazy as _
+
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
 from django.core.exceptions import ObjectDoesNotExist
@@ -6,18 +8,18 @@ from imagekit.models import ImageModel
 
 
 PROPERTY_LABELS = (
-    ('home', 'home'),
-    ('work', 'work'),
-    ('other', 'other'),
+    ('home', _('home')),
+    ('work', _('work')),
+    ('other', _('other')),
 )
 
 IM_SERVICES = (
-    ('google', 'Google Talk'),
-    ('aim', 'AIM'),
-    ('yahoo', 'Yahoo'),
-    ('msn', 'MSN'),
-    ('icq', 'ICQ'),
-    ('jabber', 'Jabber'),
+    ('google', _('Google Talk')),
+    ('aim', _('AIM')),
+    ('yahoo', _('Yahoo')),
+    ('msn', _('MSN')),
+    ('icq', _('ICQ')),
+    ('jabber', _('Jabber')),
 )
 
 
@@ -42,7 +44,7 @@ class ContactProperty(models.Model):
 
 
 class PrimaryProperty(ContactProperty):
-    is_primary = models.BooleanField(default=False)
+    is_primary = models.BooleanField(_("primary"), default=False)
     
     objects = PrimaryPropertyManager()
         
@@ -72,7 +74,7 @@ class PrimaryProperty(ContactProperty):
 # themselves if different.
 
 class LabeledProperty(models.Model):
-    label = models.CharField(max_length=200, choices=PROPERTY_LABELS)
+    label = models.CharField(_("label"), max_length=200, choices=PROPERTY_LABELS)
     
     class Meta:
         abstract = True
@@ -82,7 +84,7 @@ class LabeledProperty(models.Model):
 
     
 class NamedProperty(models.Model):
-    name = models.CharField(max_length=200)
+    name = models.CharField(_("name"), max_length=200)
     
     class Meta:
         abstract = True
@@ -118,7 +120,7 @@ class PrimaryPropertyDescriptor(object):
             
 class CustomField(ContactProperty, NamedProperty):
     contact = models.ForeignKey('Contact', related_name="custom_fields")
-    value = models.TextField()
+    value = models.TextField(_("value"))
 
     def __unicode__(self):
         return u'%s: %s' % (self.name, self.value)
@@ -126,35 +128,43 @@ class CustomField(ContactProperty, NamedProperty):
 
 class Date(ContactProperty, NamedProperty):
     contact = models.ForeignKey('Contact', related_name="dates")
-    value = models.DateField('date')
-
+    value = models.DateField(_("date"))
+    
+    class Meta:
+        verbose_name = _("date")
+        verbose_name_plural = _("dates")
 
 class EmailAddress(PrimaryProperty, LabeledProperty):
     contact = models.ForeignKey('Contact', related_name="email_addresses")
-    value = models.EmailField('address')
+    value = models.EmailField(_("address"))
 
     class Meta:
-        verbose_name_plural = 'email addresses'
+        verbose_name = _("email address")
+        verbose_name_plural = _("email addresses")
 
 
 class IMAccount(ContactProperty):
     contact = models.ForeignKey('Contact', related_name="im_accounts")
-    service = models.CharField(max_length=30, choices=IM_SERVICES)
-    account = models.CharField('user name or email address', max_length=200)
+    service = models.CharField(_("service"), max_length=30, choices=IM_SERVICES)
+    account = models.CharField(_("account"), help_text=_("user name or email address"), max_length=200)
     
+    class Meta:
+        verbose_name = _("IM account")
+        verbose_name_plural = _("IM accounts")
+            
     @property
     def value(self):
         return self.account
-    
-    class Meta:
-        verbose_name = 'IM account'
-        verbose_name_plural = 'IM accounts'
 
 
 class Link(ContactProperty, NamedProperty):
     contact = models.ForeignKey('Contact', related_name="links")
-    value = models.URLField('URL', max_length=200, default='http://')
-        
+    value = models.URLField(_('URL'), max_length=200, default='http://')
+
+    class Meta:
+        verbose_name = _("link")
+        verbose_name_plural = _("links")
+                
     def save(self, *args, **kwargs):
         if self.value == 'http://':
             return
@@ -163,36 +173,45 @@ class Link(ContactProperty, NamedProperty):
 
 class Organization(PrimaryProperty):
     contact = models.ForeignKey('Contact', related_name="organizations")
-    name = models.CharField(max_length=200)
-    title = models.CharField(max_length=200, blank=True)
-    
+    name = models.CharField(_("name"), max_length=200)
+    title = models.CharField(_("title"), max_length=200, blank=True)
+
+    class Meta:
+        verbose_name = _("organization")
+        verbose_name_plural = _("organizations")
+            
     def __unicode__(self):
         return self.name
 
 
 class PhoneNumber(PrimaryProperty):
     PHONE_NUM_LABELS = (
-        ('home', 'home'),
-        ('work', 'work'),
-        ('home fax', 'home fax'),
-        ('work fax', 'work fax'),
-        ('mobile', 'mobile'),
-        ('other', 'other'),
+        ('home', _('home')),
+        ('work', _('work')),
+        ('home fax', _('home fax')),
+        ('work fax', _('work fax')),
+        ('mobile', _('mobile')),
+        ('other', _('other')),
     )
     contact = models.ForeignKey('Contact', related_name="phone_numbers")
-    label = models.CharField(max_length=200, choices=PHONE_NUM_LABELS)
-    value = models.CharField('number', max_length=100)
-    
+    label = models.CharField(_("label"), max_length=200, choices=PHONE_NUM_LABELS)
+    value = models.CharField(_('number'), max_length=100)
+
+    class Meta:
+        verbose_name = _("phone number")
+        verbose_name_plural = _("phone numbers")
+            
     def __unicode__(self):
         return u'%s [%s]' % (self.value, PhoneNumber.get_label_display(self))
                                        
 
 class PostalAddress(PrimaryProperty, LabeledProperty):
     contact = models.ForeignKey('Contact', related_name="postal_addresses")
-    value = models.TextField('address')
+    value = models.TextField(_('address'))
 
     class Meta:
-        verbose_name_plural = 'postal addresses'
+        verbose_name = _("postal address")
+        verbose_name_plural = _("postal addresses")
 
 
 class Contact(ImageModel):
@@ -200,13 +219,15 @@ class Contact(ImageModel):
     
     """
     name = models.CharField(max_length=200)
-    is_company = models.BooleanField(default=False)
-    photo = models.ImageField(upload_to='var/addressbook/photos', blank=True)
-    notes = models.TextField(blank=True)
+    is_company = models.BooleanField(_("company"), default=False)
+    photo = models.ImageField(_("photo"), upload_to='var/addressbook/photos', blank=True)
+    notes = models.TextField(_("notes"), blank=True)
     date_created = models.DateTimeField(auto_now_add=True, editable=False)
     date_updated = models.DateTimeField(auto_now=True, editable=False)
 
     class Meta:
+        verbose_name = _("contact")
+        verbose_name_plural = _("contacts")
         ordering = ('name',)
         
     class IKOptions:
@@ -226,14 +247,17 @@ class Contact(ImageModel):
     
     @property
     def address(self):
-        return ', '.join([s.strip() for s in \
-                          str(self.postal_address).split('\n')])
+        return self.postal_address
 
 
 class Group(models.Model):
     name = models.CharField(max_length=200, unique=True)
-    description = models.TextField(blank=True)
-    members = models.ManyToManyField(Contact, null=True, blank=True)
+    description = models.TextField(_("description"), blank=True)
+    members = models.ManyToManyField(Contact, verbose_name=_("members"), null=True, blank=True)
+        
+    class Meta:
+        verbose_name = _("group")
+        verbose_name_plural = _("groups")
         
     @property
     def member_list(self):
