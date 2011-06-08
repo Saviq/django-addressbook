@@ -186,12 +186,9 @@ class Organization(PrimaryProperty):
 
 class PhoneNumber(PrimaryProperty):
     PHONE_NUM_LABELS = (
-        ('home', _('home')),
-        ('work', _('work')),
-        ('home fax', _('home fax')),
-        ('work fax', _('work fax')),
+        ('landline', _('landline')),
         ('mobile', _('mobile')),
-        ('other', _('other')),
+        ('fax', _('fax')),
     )
     contact = models.ForeignKey('Contact', related_name="phone_numbers")
     label = models.CharField(_("label"), max_length=200, choices=PHONE_NUM_LABELS)
