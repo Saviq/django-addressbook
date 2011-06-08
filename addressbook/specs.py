@@ -4,7 +4,7 @@ from imagekit import processors
 class ResizeAdminThumbnail(processors.Resize):
     width = 50
     height = 50
-    crop = True
+    crop = False
     
 class EnhanceSmall(processors.Adjustment):
     contrast = 1.2
