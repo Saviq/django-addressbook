@@ -93,6 +93,15 @@ class NamedProperty(models.Model):
         return u'%s: %s' % (self.name, self.value)
 
         
+class OptionalNamedProperty(models.Model):
+    name = models.CharField(_("name"), max_length=200, blank=True)
+
+    class Meta:
+        abstract = True
+    
+    def __unicode__(self):
+        return u'%s%s' % (self.name and '%s: ' % self.name or "", self.value)
+
 # Contact properties
 
 class PrimaryPropertyDescriptor(object):
@@ -134,7 +143,7 @@ class Date(ContactProperty, NamedProperty):
         verbose_name = _("date")
         verbose_name_plural = _("dates")
 
-class EmailAddress(PrimaryProperty, LabeledProperty):
+class EmailAddress(PrimaryProperty, LabeledProperty, OptionalNamedProperty):
     contact = models.ForeignKey('Contact', related_name="email_addresses")
     value = models.EmailField(_("address"))
 
@@ -184,7 +193,7 @@ class Organization(PrimaryProperty):
         return self.name
 
 
-class PhoneNumber(PrimaryProperty):
+class PhoneNumber(PrimaryProperty, OptionalNamedProperty):
     PHONE_NUM_LABELS = (
         ('landline', _('landline')),
         ('mobile', _('mobile')),
@@ -199,7 +208,8 @@ class PhoneNumber(PrimaryProperty):
         verbose_name_plural = _("phone numbers")
             
     def __unicode__(self):
-        return u'%s [%s]' % (self.value, PhoneNumber.get_label_display(self))
+        return u'%s%s [%s]' % (self.name and "%s: " % self.name or "", 
+                               self.value, PhoneNumber.get_label_display(self))
                                        
 
 class PostalAddress(PrimaryProperty, LabeledProperty):
