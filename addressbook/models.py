@@ -4,7 +4,6 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
-from imagekit.models import ImageModel
 
 
 PROPERTY_LABELS = (
@@ -232,7 +231,7 @@ class PostalAddress(PrimaryProperty, LabeledProperty):
         return ", ".join([i for i in data if i])
 
 
-class Contact(ImageModel):
+class Contact(models.Model):
     """ A person or company.
     
     """
@@ -248,11 +247,6 @@ class Contact(ImageModel):
         verbose_name_plural = _("contacts")
         ordering = ('name',)
         
-    class IKOptions:
-        image_field = 'photo'
-        spec_module = 'addressbook.specs'
-        cache_dir = 'var/cache/addressbook'
-
     def __unicode__(self):
         return self.name
         

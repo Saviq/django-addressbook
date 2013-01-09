@@ -1,6 +1,8 @@
 from django.contrib import admin
 from django.contrib.contenttypes import generic
 
+from imagekit.admin import AdminThumbnail
+
 from models import *
 
 
@@ -44,7 +46,7 @@ class ContactAdmin(admin.ModelAdmin):
                     'im_account',
                     'phone_number',
                     'address',
-                    'admin_thumbnail_view')
+                    'admin_thumbnail')
     search_fields = ['name',
                      'notes']
     inlines = [
@@ -57,6 +59,7 @@ class ContactAdmin(admin.ModelAdmin):
         InlineDate,
         InlineCustomField,
     ]
+    admin_thumbnail = AdminThumbnail(image_field='photo')
 
 
 class GroupAdmin(admin.ModelAdmin):
