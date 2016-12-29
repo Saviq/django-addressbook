@@ -25,7 +25,7 @@ IM_SERVICES = (
 class PrimaryPropertyManager(models.Manager):
     def primary(self):
         try:
-            return self.get_query_set().get(is_primary=True)
+            return self.get_queryset().get(is_primary=True)
         except ObjectDoesNotExist:
             return None
            
@@ -112,7 +112,7 @@ class PrimaryPropertyDescriptor(object):
         
     def __get__(self, instance, owner):
         if instance is None:
-            return None
+            return self
         return self.get_collection(instance).primary()
         
     def __set__(self, instance, value):
@@ -151,7 +151,7 @@ class EmailAddress(PrimaryProperty, LabeledProperty, OptionalNamedProperty):
         verbose_name_plural = _("email addresses")
 
 
-class IMAccount(ContactProperty):
+class IMAccount(PrimaryProperty):
     contact = models.ForeignKey('Contact', related_name="im_accounts")
     service = models.CharField(_("service"), max_length=30, choices=IM_SERVICES)
     account = models.CharField(_("account"), help_text=_("user name or email address"), max_length=200)
