@@ -264,8 +264,8 @@ class Contact(models.Model):
 class Group(models.Model):
     name = models.CharField(max_length=200, unique=True)
     description = models.TextField(_("description"), blank=True)
-    members = models.ManyToManyField(Contact, verbose_name=_("members"), null=True, blank=True)
-        
+    members = models.ManyToManyField(Contact, verbose_name=_("members"), blank=True)
+
     class Meta:
         verbose_name = _("group")
         verbose_name_plural = _("groups")
